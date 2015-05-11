@@ -1,4 +1,4 @@
-package org.github.dant3
+package com.unison.gradle
 
 import groovy.lang.Closure
 
@@ -12,6 +12,9 @@ trait GroovyConversions {
   implicit def toGroovyClosure[I,O](fn: I ⇒ O):Closure[O] = new Closure[O](fn) {
     def doCall(arg:I): O = fn(arg)
   }
+
+
+  implicit def toScalaFunction[O](groovyClosure: Closure[O]): () ⇒ O = { () ⇒ groovyClosure.call() }
 }
 
 object GroovyConversions extends GroovyConversions

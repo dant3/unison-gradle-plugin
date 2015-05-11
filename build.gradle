@@ -1,11 +1,11 @@
 plugins {
-    id "scala"
+    id 'scala'
 }
 
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url "https://jitpack.io" }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -13,5 +13,6 @@ dependencies {
     compile 'org.scala-lang:scala-library:2.11.6'
     compile 'com.github.dant3:unison-api-client:0.1'
 
+    testCompile 'org.easymock:easymock:3.3.1'
     testCompile 'org.scalatest:scalatest_2.11:2.2.4'
 }
