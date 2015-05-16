@@ -43,7 +43,7 @@ package object plugin {
        |
        |Or alternatively you can supply them during gradle call:
        |
-       |gradle <unisonTask> -D$extParamKey=$exampleValue
+       |gradle <unisonTask> -P$extParamKey=$exampleValue
      """.stripMargin
   }
 }
