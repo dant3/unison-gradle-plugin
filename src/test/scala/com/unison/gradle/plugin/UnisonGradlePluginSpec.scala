@@ -2,10 +2,9 @@ package com.unison.gradle.plugin
 
 import java.util.Collections
 
-import com.unison.api.{UnisonID, Topic, Room, UnisonApi}
-import com.unison.gradle.GradleConversions
-import GradleConversions._
-import org.easymock.EasyMock
+import com.unison.api.UnisonApi.NewCommentData
+import com.unison.api._
+import com.unison.gradle.GradleConversions._
 import org.gradle.api.{Action, Project, Task}
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.runner.RunWith
@@ -54,24 +53,49 @@ class UnisonGradlePluginSpec extends WordSpec with Matchers with EasyMockSugar w
 
     "use UnisonApi to list topics" in {
       val unisonApiMock = mock[UnisonApi]
+      val roomID = randomUnisonID
 
+      project.ext.roomID = roomID
       project.configureExtension[UnisonGradlePlugin.Configuration] { implicit ext ⇒ import ext._
         login = randomString
         password = randomString
         clientFactory = verifyLoginPassword((login, password)).andThenReturn(unisonApiMock).untupled
       }
 
-      an[NotImplementedError] shouldBe thrownBy {
-        expecting {
-          unisonApiMock.getTopics(EasyMock.anyObject[UnisonID]).andReturn(Collections.emptyList[Topic])
-        }; whenExecuting(unisonApiMock) {
-          project.findTask(tasks.listTopics).get.execute()
-        }
+      expecting {
+        unisonApiMock.getTopics(UnisonID.fromString(roomID)).andReturn(Collections.emptyList[Topic])
+      }; whenExecuting(unisonApiMock) {
+        project.findTask(tasks.listTopics).get.execute()
+      }
+    }
+
+    "use UnisonApi to post comment" in {
+      val unisonApiMock = mock[UnisonApi]
+      val roomID = randomUnisonID
+      val topicID = randomUnisonID
+      val commentText = randomString
+
+      project.ext.topicID = topicID
+      project.configureExtension[UnisonGradlePlugin.Configuration] { implicit ext ⇒
+        ext.login = randomString
+        ext.password = randomString
+        ext.roomID = roomID
+        ext.commentText = commentText
+        ext.clientFactory = verifyLoginPassword((ext.login, ext.password)).andThenReturn(unisonApiMock).untupled
+      }
+
+      expecting {
+        unisonApiMock.createComment(UnisonID.fromString(roomID),
+                                    UnisonID.fromString(topicID),
+                                    NewCommentData.create(commentText)).andReturn(mock[Comment])
+      }; whenExecuting(unisonApiMock) {
+        project.findTask(tasks.createComment).get.execute()
       }
     }
   }
 
-  
+
+  def randomUnisonID = Random.alphanumeric.take(11).mkString
   def randomString = Random.alphanumeric.take(42).mkString
   def verifyLoginPassword(expected:(String, String)) = { (actual:(String, String)) ⇒ actual shouldBe expected }
 

@@ -13,7 +13,7 @@ object tasks {
   def create(project:Project, plugin:UnisonGradlePlugin) = {
     import GradleConversions._
 
-    implicit val ctx = Context(plugin.extension)
+    implicit val ctx = Context(project, plugin.extension)
     project.createTask(listRooms, listRoomsTaskConfiguration)
     project.createTask(listTopics, listTopicsTaskConfiguration)
     project.createTask(createComment, createCommentTaskConfiguration)
