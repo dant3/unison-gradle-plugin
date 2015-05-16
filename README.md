@@ -8,6 +8,7 @@ To use it, simply include the dependencies via `buildscript {}` and `'apply'` th
 ```groovy
 buildscript {
   repositories {
+    jcetner()
     maven { url "https://jitpack.io" } 
   }
   dependencies {
@@ -21,8 +22,8 @@ group "example"
 apply plugin: "unison"
 
 unison {
-  login = 'foo'
-  password = 'bar'
+  login 'foo'
+  password 'bar'
   roomID 'abcdef12345'
   topicID 'zxcvbn98765'
   commentText 'Hello, world!'
