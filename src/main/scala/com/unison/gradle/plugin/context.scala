@@ -14,7 +14,7 @@ case class Context(project:Project, ext:UnisonGradlePlugin.Configuration) extend
   def topicID = UnisonID.fromString(
     configuredParameter(project.ext.topicID.map(_.toString).orElse(Option(ext.topicID)), noTopicIDError)
   )
-  def commentText = configuredParameter(ext.commentText, noCommentText)
+  def commentText = configuredParameter(ext.commentText, noCommentText).toString
 
   def createClient = ext.clientFactory.tupled.apply(credentials)
   def credentials:(String, String) = {

@@ -20,26 +20,26 @@ class UnisonGradlePlugin extends Plugin[Project] {
 }
 
 
-object UnisonGradlePlugin extends GroovyConversions {
+object UnisonGradlePlugin {
   class Configuration {
     @Nullable @BeanProperty var login:String = _
     @Nullable @BeanProperty var password:String = _
 
     @Nullable @BeanProperty var roomID:String = _
     @Nullable @BeanProperty var topicID:String = _
-    private var commentTextSupplier: Option[() ⇒ String] = None
+    private var commentTextSupplier: Option[() ⇒ CharSequence] = None
 
     // scala api
-    def commentText:Option[String] = commentTextSupplier.map(_.apply())
-    def commentText_=(value:String):Unit = commentTextSupplier = Some(() ⇒ value)
-    def commentText_=(supplier:() ⇒ String):Unit = commentTextSupplier = Some(supplier)
+    def commentText:Option[CharSequence] = commentTextSupplier.map(_.apply())
+    def commentText_=(value:CharSequence):Unit = commentTextSupplier = Some(() ⇒ value)
+    def commentText_=(supplier:() ⇒ CharSequence):Unit = commentTextSupplier = Some(supplier)
     // groovy api
-    def commentText(value:String):Unit = setCommentText(value)
-    def commentText(closure:Closure[String]):Unit = setCommentText(closure)
-    def getCommentText:String = commentText.orNull
-    def setCommentText(value:String):Unit = { commentText = value }
-    def setCommentText(closure:Closure[String]):Unit = {
-      commentText = closure
+    def commentText(value:CharSequence):Unit = setCommentText(value)
+    def commentText(closure:Closure[CharSequence]):Unit = setCommentText(closure)
+    def getCommentText:CharSequence = commentText.orNull
+    def setCommentText(value:CharSequence):Unit = { commentText = value }
+    def setCommentText(closure:Closure[CharSequence]):Unit = {
+      commentText = GroovyConversions.toScalaFunction(closure)
     }
 
     def login(login:String):Unit = this.login = login

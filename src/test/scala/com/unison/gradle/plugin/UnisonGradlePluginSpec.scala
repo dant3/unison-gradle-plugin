@@ -5,6 +5,7 @@ import java.util.Collections
 import com.unison.api.UnisonApi.NewCommentData
 import com.unison.api._
 import com.unison.gradle.GradleConversions._
+import com.unison.gradle.GroovyConversions
 import org.gradle.api.{Action, Project, Task}
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.runner.RunWith
@@ -80,7 +81,7 @@ class UnisonGradlePluginSpec extends WordSpec with Matchers with EasyMockSugar w
         ext.login = randomString
         ext.password = randomString
         ext.roomID = roomID
-        ext.commentText = commentText
+        ext.commentText(GroovyConversions.toGroovyClosure[CharSequence](commentText))
         ext.clientFactory = verifyLoginPassword((ext.login, ext.password)).andThenReturn(unisonApiMock).untupled
       }
 
