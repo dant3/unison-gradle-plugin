@@ -31,9 +31,12 @@ object UnisonGradlePlugin {
     @Nullable @BeanProperty var login:String = _
     @Nullable @BeanProperty var password:String = _
 
-    @Nullable @BeanProperty var roomID:String = _
-    @Nullable @BeanProperty var topicID:String = _
+    @Nullable @BeanProperty var roomID:CharSequence = _
+    def roomID(id:CharSequence) = roomID = id
+    @Nullable @BeanProperty var topicID:CharSequence = _
+    def topicID(id:CharSequence) = topicID = id
     private var commentTextSupplier: Option[() ⇒ CharSequence] = None
+
 
     // scala api
     def commentText:Option[CharSequence] = commentTextSupplier.map(_.apply())

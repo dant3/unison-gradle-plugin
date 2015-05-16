@@ -6,21 +6,21 @@ import com.unison.gradle.plugin.Context.configuredParameter
 import org.codehaus.groovy.control.ConfigurationException
 import org.gradle.api.{Nullable, Project}
 
-case class Context(project:Project, ext:UnisonGradlePlugin.Extension) extends GradleConversions {
+case class Context(project:Project, config:UnisonGradlePlugin.Extension) extends GradleConversions {
 
   def roomID = UnisonID.fromString(
-    configuredParameter(project.ext.roomID.map(_.toString).orElse(Option(ext.roomID)), noRoomIDError)
+    configuredParameter(project.ext.roomID.orElse(Option(config.roomID)), noRoomIDError).toString
   )
   def topicID = UnisonID.fromString(
-    configuredParameter(project.ext.topicID.map(_.toString).orElse(Option(ext.topicID)), noTopicIDError)
+    configuredParameter(project.ext.topicID.orElse(Option(config.topicID)), noTopicIDError).toString
   )
-  def commentText = configuredParameter(ext.commentText, noCommentText).toString
+  def commentText = configuredParameter(config.commentText, noCommentText).toString
 
-  def createClient = ext.clientFactory.tupled.apply(credentials)
+  def createClient = config.clientFactory.tupled.apply(credentials)
   def credentials:(String, String) = {
     val credentials = for {
-      login ← Option(ext.login)
-      password ← Option(ext.password)
+      login ← Option(config.login)
+      password ← Option(config.password)
     } yield (login, password)
     configuredParameter(credentials, noLoginPasswordError)
   }
