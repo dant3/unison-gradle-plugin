@@ -20,7 +20,7 @@ class UnisonGradlePluginSpec extends WordSpec with Matchers with EasyMockSugar w
 
   override def beforeEach() = {
     project = ProjectBuilder.builder.build()
-    project.applyPlugin("unison-plugin")
+    project.applyPlugin("unison")
   }
 
 
