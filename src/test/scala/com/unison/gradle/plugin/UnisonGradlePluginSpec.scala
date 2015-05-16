@@ -103,7 +103,7 @@ class UnisonGradlePluginSpec extends WordSpec with Matchers with EasyMockSugar w
 
   implicit class RichTask(task:Task) {
     // This implementation is very rough and does not involves dependency resolution.
-    // To test tasks with dependencies you one needs to create integration testing.
+    // To test tasks with dependencies one needs to create integration testing.
     // Unfortunately as of may 2015 Gradle still does not have integration testing solution.
     def execute():Unit = task.getActions.toArray.
         map(_.asInstanceOf[Action[Any]]).foreach(_.execute(null))
