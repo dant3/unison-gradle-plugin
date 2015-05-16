@@ -43,3 +43,30 @@ unison {
   }
 }
 ```
+
+## Tasks
+
+Plugin adds the following tasks to your project:
+
+* `listRooms` - lists all rooms available with supplied credentials. This is a helper task to find a room you want to post in.
+* `listTopics` - lists all topics in room you've selected by configuration. This is a helper task to fild a topic you want to post in.
+* `createComment` - creates a comment with supplied text in a room and it's topic provided by configuration.
+
+## If tasks are not enough
+
+Sometimes you need more then just tasks though. Imagine you want to report about build failures. You can hook `gradle.buildFinished`, but then you can't use
+Gradle tasks since build is already finished. No worries, we got you covered. Plugin extends `unison` extension with some methods which are duplicating it's tasks
+functionality. In this case we could do it like this:
+
+```groovy
+gradle.buildFinished { result ->
+    if (result.failure) {
+        StringWriter stacktrace = new StringWriter();
+        result.failure.printStackTrace(new PrintWriter(stacktrace));
+        unison.createComment("Build of $project FAILED. Reason is:\n${stacktrace}".
+            replaceAll("\n", "<br>")
+            /* this is needed since unison uses subset of html for markup */
+        )
+    }
+}
+```
