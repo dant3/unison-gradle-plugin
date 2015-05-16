@@ -39,7 +39,7 @@ class UnisonGradlePluginSpec extends WordSpec with Matchers with EasyMockSugar w
     "use UnisonApi to list rooms" in {
       val unisonApiMock = mock[UnisonApi]
 
-      project.configureExtension[UnisonGradlePlugin.Configuration] { implicit ext ⇒ import ext._
+      project.configureExtension[UnisonGradlePlugin.Extension] { implicit ext ⇒ import ext._
         login = randomString
         password = randomString
         clientFactory = verifyLoginPassword((login, password)).andThenReturn(unisonApiMock).untupled
@@ -57,7 +57,7 @@ class UnisonGradlePluginSpec extends WordSpec with Matchers with EasyMockSugar w
       val roomID = randomUnisonID
 
       project.ext.roomID = roomID
-      project.configureExtension[UnisonGradlePlugin.Configuration] { implicit ext ⇒ import ext._
+      project.configureExtension[UnisonGradlePlugin.Extension] { implicit ext ⇒ import ext._
         login = randomString
         password = randomString
         clientFactory = verifyLoginPassword((login, password)).andThenReturn(unisonApiMock).untupled
@@ -77,7 +77,7 @@ class UnisonGradlePluginSpec extends WordSpec with Matchers with EasyMockSugar w
       val commentText = randomString
 
       project.ext.topicID = topicID
-      project.configureExtension[UnisonGradlePlugin.Configuration] { implicit ext ⇒
+      project.configureExtension[UnisonGradlePlugin.Extension] { implicit ext ⇒
         ext.login = randomString
         ext.password = randomString
         ext.roomID = roomID

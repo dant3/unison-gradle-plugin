@@ -6,7 +6,7 @@ import com.unison.gradle.plugin.Context.configuredParameter
 import org.codehaus.groovy.control.ConfigurationException
 import org.gradle.api.{Nullable, Project}
 
-case class Context(project:Project, ext:UnisonGradlePlugin.Configuration) extends GradleConversions {
+case class Context(project:Project, ext:UnisonGradlePlugin.Extension) extends GradleConversions {
 
   def roomID = UnisonID.fromString(
     configuredParameter(project.ext.roomID.map(_.toString).orElse(Option(ext.roomID)), noRoomIDError)

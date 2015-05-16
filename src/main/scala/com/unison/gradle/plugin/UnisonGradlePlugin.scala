@@ -3,7 +3,7 @@ package com.unison.gradle.plugin
 import com.unison.api.UnisonApi
 import com.unison.api.client.UnisonApiClient
 import com.unison.gradle.GroovyConversions
-import com.unison.gradle.plugin.UnisonGradlePlugin.Configuration
+import com.unison.gradle.plugin.UnisonGradlePlugin.Extension
 import groovy.lang.Closure
 import org.codehaus.groovy.control.ConfigurationException
 import org.gradle.api.{Nullable, Plugin, Project}
@@ -11,9 +11,15 @@ import org.gradle.api.{Nullable, Plugin, Project}
 import scala.beans.BeanProperty
 
 class UnisonGradlePlugin extends Plugin[Project] {
-  val extension = new Configuration
+  private var _extension:Option[Extension] = None
+  def extension = _extension match {
+    case Some(ext) ⇒ ext
+    case None ⇒ throw new RuntimeException("Extension is not created yet")
+  }
 
   def apply(project:Project):Unit = {
+    val extension = new Extension(project)
+    _extension = Some(extension)
     project.getExtensions.add("unison", extension)
     tasks.create(project, this)
   }
@@ -21,7 +27,7 @@ class UnisonGradlePlugin extends Plugin[Project] {
 
 
 object UnisonGradlePlugin {
-  class Configuration {
+  class Extension(project:Project) extends UnisonExtensionApi(project) {
     @Nullable @BeanProperty var login:String = _
     @Nullable @BeanProperty var password:String = _
 
