@@ -24,9 +24,9 @@ object UnisonGradlePlugin {
     @Nullable @BeanProperty var password:String = _
 
     @Nullable @BeanProperty var roomID:CharSequence = _
-    def roomID(id:CharSequence) = roomID = id
+    def roomID(id:CharSequence):Unit = { this.roomID = id }
     @Nullable @BeanProperty var topicID:CharSequence = _
-    def topicID(id:CharSequence) = topicID = id
+    def topicID(id:CharSequence):Unit = { this.topicID = id }
     private var commentTextSupplier: Option[() ⇒ CharSequence] = None
 
 
